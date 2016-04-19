@@ -1,0 +1,117 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/paper-styles/shadow.html">
+
+<dom-module id="expendable-list">
+    <style>
+
+        :host {
+            display: block;
+        }
+
+        /* We need to propagate styles if first child is not an expendable-list-item */
+        :host ::content .iron-selected expendable-list-item,
+        :host ::content expendable-list-item.iron-selected  {
+            width: 100%;
+            margin: 15px auto 15px auto;
+            @apply(--shadow-elevation-16dp);
+        }
+
+        :host ::content .iron-selected paper-item,
+        :host ::content .iron-selected paper-icon-item {
+            font-weight: bold;
+            cursor: default;
+        }
+
+        :host ::content .iron-selected paper-menu paper-item,
+        :host ::content .iron-selected paper-menu paper-icon-item {
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+    </style>
+
+    <template>
+        <iron-selector
+                id="selector"
+                on-iron-select="_onIronSelect"
+                on-iron-deselect="_onIronDeselect"
+                attr-for-selected="[[attrForSelected]]"
+                selected="{{selected}}">
+            <content></content>
+        </iron-selector>
+    </template>
+
+    <script>
+        (function() {
+            'use strict';
+
+            Polymer({
+                is: 'expendable-list',
+
+                properties: {
+                    attrForSelected: String,
+                    selected: {
+                        type: String,
+                        notify: true
+                    },
+                    noClose: {
+                        type: Boolean,
+                        value: false
+                    }
+                },
+
+                _onIronSelect: function(event) {
+                    var inboxItem = this._getInboxItem(event.detail.item);
+                    if (inboxItem) {
+                        inboxItem.open(true);
+                    }
+                },
+
+                _onIronDeselect: function(event) {
+                    var inboxItem = this._getInboxItem(event.detail.item);
+                    if (inboxItem) {
+                        inboxItem.open(false);
+                    }
+                },
+
+                _getInboxItem: function(node) {
+                    if (node.nodeName === 'expendable-list-item') {
+                        /* We clicked on an expendable-list-item element */
+                        return node;
+                    } else if (node.$$) {
+                        /* We clicked on a polymer element that may contain an expendable-list-item */
+                        return node.$$('expendable-list-item');
+                    } else {
+                        /* We clicked on a standard HTML container that may contain an expendable-list-item */
+                        return Polymer.dom(node).querySelector('expendable-list-item');
+                    }
+                },
+
+                select: function(id) {
+                    this.$.selector.select(id);
+                },
+
+                ready: function() {
+                    var elem = this;
+                    if (!this.noClose) {
+                        document.addEventListener('tap', function(event) {
+                            /* Callback to close the list if we clicked outside of it */
+                            if (elem.$.selector.selected !== null) {
+                                var node = event.target;
+                                while (node) {
+                                    if (node === elem) {
+                                        return;
+                                    }
+                                    node = node.parentNode;
+                                }
+                                elem.$.selector.select(null);
+                            }
+                        });
+                    }
+                }
+
+            });
+        })();
+    </script>
+</dom-module>
