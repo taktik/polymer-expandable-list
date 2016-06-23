@@ -29,6 +29,7 @@
             cursor: pointer;
         }
 
+
     </style>
 
     <template>
@@ -37,9 +38,11 @@
                 on-iron-select="_onIronSelect"
                 on-iron-deselect="_onIronDeselect"
                 attr-for-selected="[[attrForSelected]]"
+
                 selected="{{selected}}">
             <content></content>
         </iron-selector>
+
     </template>
 
     <script>
@@ -60,9 +63,13 @@
                         value: false
                     }
                 },
+				//behaviors:[SortableBehavior],
 
                 _onIronSelect: function(event) {
+					//console.log(event)
+					//event.stopPropagation()
                     var inboxItem = this._getInboxItem(event.detail.item);
+					//console.log(inboxItem)
                     if (inboxItem) {
                         inboxItem.open(true);
                     }
@@ -76,15 +83,16 @@
                 },
 
                 _getInboxItem: function(node) {
-                    if (node.nodeName === 'expendable-list-item') {
+					//console.log(node)
+                    if (node.nodeName.toLowerCase() === 'expendable-list-item') {
                         /* We clicked on an expendable-list-item element */
                         return node;
-                    } else if (node.$$) {
+                    } else if (node.$$ && node.$$('expendable-list-item')) {
                         /* We clicked on a polymer element that may contain an expendable-list-item */
-                        return node.$$('expendable-list-item');
+                        return node.$$('expendable-list-item')[0];
                     } else {
                         /* We clicked on a standard HTML container that may contain an expendable-list-item */
-                        return Polymer.dom(node).querySelector('expendable-list-item');
+                        return node.querySelector('expendable-list-item');
                     }
                 },
 
