@@ -38,8 +38,9 @@
                 on-iron-select="_onIronSelect"
                 on-iron-deselect="_onIronDeselect"
                 attr-for-selected="[[attrForSelected]]"
-
-                selected="{{selected}}">
+                multi
+                selected="{{selected}}"
+                selected-values="{{selectedValues}}">
             <content></content>
         </iron-selector>
 
@@ -56,6 +57,10 @@
                     attrForSelected: String,
                     selected: {
                         type: String,
+                        notify: true
+                    },
+                    selectedValues: {
+                        type: Array,
                         notify: true
                     },
                     noClose: {
