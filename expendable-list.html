@@ -38,7 +38,7 @@
                 on-iron-select="_onIronSelect"
                 on-iron-deselect="_onIronDeselect"
                 attr-for-selected="[[attrForSelected]]"
-                multi
+                multi="{{multi}}"
                 selected="{{selected}}"
                 selected-values="{{selectedValues}}">
             <content></content>
@@ -64,6 +64,10 @@
                         notify: true
                     },
                     noClose: {
+                        type: Boolean,
+                        value: false
+                    },
+                    multi: {
                         type: Boolean,
                         value: false
                     }
