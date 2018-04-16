@@ -2,7 +2,7 @@
 	"name": "polymer-expandable-list",
 	"main": "polymer-expandable-list.html",
 	"dependencies": {
-        "polymer": "Polymer/polymer#2.0.0",
+        "polymer": "Polymer/polymer#2.6.0",
         "iron-collapse": "2.2.0",
         "iron-selector": "2.1.0",
         "paper-styles": "2.1.0"
