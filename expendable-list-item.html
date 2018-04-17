@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-collapse/iron-collapse.html">
-<link rel="import" href="../paper-styles/shadow.html">
 
 <dom-module id="expendable-list-item">
     <template>
@@ -8,43 +7,43 @@
                 :host {
                     display: block;
                     background-color: white;
-        
+
                     -webkit-transition: all 0.4s ease-in-out;
                     -moz-transition: all 0.4s ease-in-out;
                     -o-transition: all 0.4s ease-in-out;
                     transition: all 0.4s ease-in-out;
-        
+
                     width: 99%;
                     margin: 0px auto 0px auto;
                     @apply --shadow-elevation-2dp;
                 }
-        
+
                 :host ::slotted(paper-item),
                 :host ::slotted(paper-icon-item) {
                     cursor: pointer;
                 }
-        
+
                 :host ::slotted(paper-item:focus:before),
                 :host ::slotted(paper-icon-item:focus:before) {
                     background: none;
                 }
-        
+
                 :host ::slotted(paper-icon-button) {
                     color: #808080;
                     width: 36px;
                     height: 36px;
                 }
-        
+
                 :host ::slotted(paper-icon-button:hover),
                 :host ::slotted(paper-icon-button:focus) {
                     color: #000000;
                 }
-        
+
                 :host ::slotted(paper-icon-button:active) {
                     background-color: #e6e6e6;
                     border-radius: 50%;
                 }
-        
+
             </style>
         <slot name="head"></slot>
         <iron-collapse id="collapse">

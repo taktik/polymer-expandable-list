@@ -1,6 +1,5 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
-<link rel="import" href="../paper-styles/shadow.html">
 
 <dom-module id="expendable-list">
     <template>
@@ -8,13 +7,13 @@
             :host {
                 display: block;
             }
-    
+
             :host ::slotted(expendable-list-item.iron-selected)  {
                 width: 100%;
                 margin: 15px auto 15px auto;
                 @apply --shadow-elevation-16dp;
-            }    
-    
+            }
+
         </style>
 
         <iron-selector
@@ -56,19 +55,17 @@
                         value: false
                     }
                 },
-				//behaviors:[SortableBehavior],
 
                 _onIronSelect: function(event) {
-					//console.log(event)
-					//event.stopPropagation()
+					event.stopPropagation()
                     var inboxItem = this._getInboxItem(event.detail.item);
-					//console.log(inboxItem)
                     if (inboxItem) {
                         inboxItem.open(true);
                     }
                 },
 
                 _onIronDeselect: function(event) {
+					event.stopPropagation()
                     var inboxItem = this._getInboxItem(event.detail.item);
                     if (inboxItem) {
                         inboxItem.open(false);
@@ -98,7 +95,7 @@
                     if (!this.noClose) {
                         document.addEventListener('tap', function(event) {
                             /* Callback to close the list if we clicked outside of it */
-                            if (elem.$.selector.selected !== null) {
+                            if (elem.$.selector.selected !== null && !elem.contains(event.path[0])) {
                                 var node = event.target;
                                 while (node) {
                                     if (node === elem) {
