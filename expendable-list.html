@@ -96,7 +96,7 @@
                         document.addEventListener('tap', function(event) {
 							const evenPath = event.getComposedPath()
                             /* Callback to close the list if we clicked outside of it */
-                            if (elem.$.selector.selected !== null && !elem.contains(event.path[0])) {
+                            if (elem.$.selector.selected !== null && !elem.contains(evenPath[0])) {
                                 var node = event.target;
                                 while (node) {
                                     if (node === elem) {
