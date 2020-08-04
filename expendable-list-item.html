@@ -1,65 +1,33 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-collapse/iron-collapse.html">
-<link rel="import" href="../paper-styles/shadow.html">
+<script type="module" src="../@polymer/polymer/polymer-legacy.js"></script>
+<script type="module" src="../@polymer/iron-collapse/iron-collapse.js"></script>
+<script type="module" src="../@polymer/paper-styles/shadow.js"></script>
+<link rel="import" href="expendable-list-item-style.html" />
 
 <dom-module id="expendable-list-item">
-    <style>
+  <style include="expendable-list-item-style"></style>
 
-        :host {
-            display: block;
-            background-color: white;
+  <template>
+    <content select=":not([collapse])"></content>
+    <iron-collapse id="collapse">
+      <content select="[collapse]"></content>
+    </iron-collapse>
+  </template>
 
-            -webkit-transition: all 0.4s ease-in-out;
-            -moz-transition: all 0.4s ease-in-out;
-            -o-transition: all 0.4s ease-in-out;
-            transition: all 0.4s ease-in-out;
+  <script type="module">
+    import { PolymerElement } from "@polymer/polymer";
+    import "../@polymer/iron-collapse/iron-collapse.js";
+    import "../@polymer/paper-styles/shadow.js";
 
-            width: 99%;
-            margin: 0px auto 0px auto;
-            @apply(--shadow-elevation-2dp);
-        }
+    class ExpendableListItem extends PolymerElement {
+      static get is() {
+        return "expendable-list-item";
+      }
 
-        :host ::content paper-item,
-        :host ::content paper-icon-item {
-            cursor: pointer;
-        }
+      open(bool) {
+        this.$.collapse.opened = bool;
+      }
+    }
 
-        :host ::content paper-item:focus:before,
-        :host ::content paper-icon-item:focus:before {
-            background: none;
-        }
-
-        :host ::content paper-icon-button {
-            color: #808080;
-            width: 36px;
-            height: 36px;
-        }
-
-        :host ::content paper-icon-button:hover,
-        :host ::content paper-icon-button:focus {
-            color: #000000;
-        }
-
-        :host ::content paper-icon-button:active {
-            background-color: #e6e6e6;
-            border-radius: 50%;
-        }
-
-    </style>
-
-    <template>
-        <content select=":not([collapse])"></content>
-        <iron-collapse id="collapse">
-            <content select="[collapse]"></content>
-        </iron-collapse>
-    </template>
-    <script>
-        Polymer({
-            is: 'expendable-list-item',
-
-            open: function(bool) {
-                this.$.collapse.opened = bool;
-            }
-        });
-    </script>
+    customElements.define("expendable-list-item", ExpendableListItem);
+  </script>
 </dom-module>
