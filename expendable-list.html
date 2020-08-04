@@ -1,134 +1,134 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-selector/iron-selector.html">
-<link rel="import" href="../paper-styles/shadow.html">
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../iron-selector/iron-selector.html" />
+<link rel="import" href="../paper-styles/shadow.html" />
 
 <dom-module id="expendable-list">
-    <style>
+  <style>
+    :host {
+      display: block;
+    }
 
-        :host {
-            display: block;
+    /* We need to propagate styles if first child is not an expendable-list-item */
+    :host ::content .iron-selected expendable-list-item,
+    :host ::content expendable-list-item.iron-selected {
+      width: 100%;
+      margin: 15px auto 15px auto;
+      @apply (--shadow-elevation-16dp);
+    }
+
+    :host ::content .iron-selected paper-item,
+    :host ::content .iron-selected paper-icon-item {
+      font-weight: bold;
+      cursor: default;
+    }
+
+    :host ::content .iron-selected paper-menu paper-item,
+    :host ::content .iron-selected paper-menu paper-icon-item {
+      font-weight: normal;
+      cursor: pointer;
+    }
+  </style>
+
+  <template>
+    <iron-selector
+      id="selector"
+      on-iron-select="_onIronSelect"
+      on-iron-deselect="_onIronDeselect"
+      attr-for-selected="[[attrForSelected]]"
+      multi="{{multi}}"
+      selected="{{selected}}"
+      selected-values="{{selectedValues}}"
+    >
+      <content></content>
+    </iron-selector>
+  </template>
+
+  <script>
+    (function () {
+      "use strict";
+
+      class ExpendableList extends Polymer.Element {
+        static get is() {
+          return "expendable-list";
+        }
+        static get properties() {
+          return {
+            attrForSelected: String,
+            selected: {
+              type: String,
+              notify: true,
+            },
+            selectedValues: {
+              type: Array,
+              notify: true,
+            },
+            noClose: {
+              type: Boolean,
+              value: false,
+            },
+            multi: {
+              type: Boolean,
+              value: false,
+            },
+          };
         }
 
-        /* We need to propagate styles if first child is not an expendable-list-item */
-        :host ::content .iron-selected expendable-list-item,
-        :host ::content expendable-list-item.iron-selected  {
-            width: 100%;
-            margin: 15px auto 15px auto;
-            @apply(--shadow-elevation-16dp);
+        _onIronSelect(event) {
+          //console.log(event)
+          //event.stopPropagation()
+          var inboxItem = this._getInboxItem(event.detail.item);
+          //console.log(inboxItem)
+          if (inboxItem) {
+            inboxItem.open(true);
+          }
         }
 
-        :host ::content .iron-selected paper-item,
-        :host ::content .iron-selected paper-icon-item {
-            font-weight: bold;
-            cursor: default;
+        _onIronDeselect(event) {
+          var inboxItem = this._getInboxItem(event.detail.item);
+          if (inboxItem) {
+            inboxItem.open(false);
+          }
         }
 
-        :host ::content .iron-selected paper-menu paper-item,
-        :host ::content .iron-selected paper-menu paper-icon-item {
-            font-weight: normal;
-            cursor: pointer;
+        _getInboxItem(node) {
+          //console.log(node)
+          if (node.nodeName.toLowerCase() === "expendable-list-item") {
+            /* We clicked on an expendable-list-item element */
+            return node;
+          } else if (node.$$ && node.$$("expendable-list-item")) {
+            /* We clicked on a polymer element that may contain an expendable-list-item */
+            return node.$$("expendable-list-item")[0];
+          } else {
+            /* We clicked on a standard HTML container that may contain an expendable-list-item */
+            return node.querySelector("expendable-list-item");
+          }
         }
 
+        select(id) {
+          this.$.selector.select(id);
+        }
 
-    </style>
-
-    <template>
-        <iron-selector
-                id="selector"
-                on-iron-select="_onIronSelect"
-                on-iron-deselect="_onIronDeselect"
-                attr-for-selected="[[attrForSelected]]"
-                multi="{{multi}}"
-                selected="{{selected}}"
-                selected-values="{{selectedValues}}">
-            <content></content>
-        </iron-selector>
-
-    </template>
-
-    <script>
-        (function() {
-            'use strict';
-
-            Polymer({
-                is: 'expendable-list',
-
-                properties: {
-                    attrForSelected: String,
-                    selected: {
-                        type: String,
-                        notify: true
-                    },
-                    selectedValues: {
-                        type: Array,
-                        notify: true
-                    },
-                    noClose: {
-                        type: Boolean,
-                        value: false
-                    },
-                    multi: {
-                        type: Boolean,
-                        value: false
-                    }
-                },
-				//behaviors:[SortableBehavior],
-
-                _onIronSelect: function(event) {
-					//console.log(event)
-					//event.stopPropagation()
-                    var inboxItem = this._getInboxItem(event.detail.item);
-					//console.log(inboxItem)
-                    if (inboxItem) {
-                        inboxItem.open(true);
-                    }
-                },
-
-                _onIronDeselect: function(event) {
-                    var inboxItem = this._getInboxItem(event.detail.item);
-                    if (inboxItem) {
-                        inboxItem.open(false);
-                    }
-                },
-
-                _getInboxItem: function(node) {
-					//console.log(node)
-                    if (node.nodeName.toLowerCase() === 'expendable-list-item') {
-                        /* We clicked on an expendable-list-item element */
-                        return node;
-                    } else if (node.$$ && node.$$('expendable-list-item')) {
-                        /* We clicked on a polymer element that may contain an expendable-list-item */
-                        return node.$$('expendable-list-item')[0];
-                    } else {
-                        /* We clicked on a standard HTML container that may contain an expendable-list-item */
-                        return node.querySelector('expendable-list-item');
-                    }
-                },
-
-                select: function(id) {
-                    this.$.selector.select(id);
-                },
-
-                ready: function() {
-                    var elem = this;
-                    if (!this.noClose) {
-                        document.addEventListener('tap', function(event) {
-                            /* Callback to close the list if we clicked outside of it */
-                            if (elem.$.selector.selected !== null) {
-                                var node = event.target;
-                                while (node) {
-                                    if (node === elem) {
-                                        return;
-                                    }
-                                    node = node.parentNode;
-                                }
-                                elem.$.selector.select(null);
-                            }
-                        });
-                    }
+        ready() {
+          var elem = this;
+          if (!this.noClose) {
+            document.addEventListener("tap", function (event) {
+              /* Callback to close the list if we clicked outside of it */
+              if (elem.$.selector.selected !== null) {
+                var node = event.target;
+                while (node) {
+                  if (node === elem) {
+                    return;
+                  }
+                  node = node.parentNode;
                 }
-
+                elem.$.selector.select(null);
+              }
             });
-        })();
-    </script>
+          }
+        }
+      }
+
+      customElements.define("expendable-list", ExpendableList);
+    })();
+  </script>
 </dom-module>
