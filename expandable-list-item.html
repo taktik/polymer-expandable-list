@@ -1,7 +1,7 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-collapse/iron-collapse.html">
 
-<dom-module id="expendable-list-item">
+<dom-module id="expandable-list-item">
     <template>
         <style>
                 :host {
@@ -52,7 +52,7 @@
     </template>
     <script>
         Polymer({
-            is: 'expendable-list-item',
+            is: 'expandable-list-item',
 
             open: function(bool) {
                 this.$.collapse.opened = bool;

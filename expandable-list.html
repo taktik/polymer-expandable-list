@@ -1,14 +1,14 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-selector/iron-selector.html">
 
-<dom-module id="expendable-list">
+<dom-module id="expandable-list">
     <template>
         <style>
             :host {
                 display: block;
             }
 
-            :host ::slotted(expendable-list-item.iron-selected)  {
+            :host ::slotted(expandable-list-item.iron-selected)  {
                 width: 100%;
                 margin: 15px auto 15px auto;
                 @apply --shadow-elevation-16dp;
@@ -34,7 +34,7 @@
             'use strict';
 
             Polymer({
-                is: 'expendable-list',
+                is: 'expandable-list',
 
                 properties: {
                     attrForSelected: String,
@@ -74,15 +74,15 @@
 
                 _getInboxItem: function(node) {
 					//console.log(node)
-                    if (node.nodeName.toLowerCase() === 'expendable-list-item') {
-                        /* We clicked on an expendable-list-item element */
+                    if (node.nodeName.toLowerCase() === 'expandable-list-item') {
+                        /* We clicked on an expandable-list-item element */
                         return node;
-                    } else if (node.$$ && node.$$('expendable-list-item')) {
-                        /* We clicked on a polymer element that may contain an expendable-list-item */
-                        return node.$$('expendable-list-item')[0];
+                    } else if (node.$$ && node.$$('expandable-list-item')) {
+                        /* We clicked on a polymer element that may contain an expandable-list-item */
+                        return node.$$('expandable-list-item')[0];
                     } else {
-                        /* We clicked on a standard HTML container that may contain an expendable-list-item */
-                        return node.querySelector('expendable-list-item');
+                        /* We clicked on a standard HTML container that may contain an expandable-list-item */
+                        return node.querySelector('expandable-list-item');
                     }
                 },
 
