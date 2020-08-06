@@ -94,16 +94,12 @@
                     var elem = this;
                     if (!this.noClose) {
                         document.addEventListener('tap', function(event) {
-							const evenPath = event.composedPath()
+                            const eventPath = event.composedPath()
                             /* Callback to close the list if we clicked outside of it */
-                            if (elem.$.selector.selected !== null && !elem.contains(evenPath[0])) {
-                                var node = event.target;
-                                while (node) {
-                                    if (node === elem) {
-                                        return;
-                                    }
-                                    node = node.parentNode;
-                                }
+                            if (
+                                elem.$.selector.selected !== null // An element in this list is already selected
+                                && !eventPath.includes(elem) // the click event occurred outside of the currently selected element (not in its children)
+                            ) {
                                 elem.$.selector.select(null);
                             }
                         });
